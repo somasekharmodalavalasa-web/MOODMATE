@@ -1,0 +1,2379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>MoodMate V2</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Arial,sans-serif;
+}
+
+:root{
+    --bg:#07111f;
+    --card:#0d1b30;
+    --card2:#12243d;
+    --text:#ffffff;
+    --muted:#9eacc0;
+    --border:#263f60;
+    --primary:#7c6cff;
+    --cyan:#67e8f9;
+    --pink:#f472b6;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    transition:.3s;
+}
+
+body.light{
+    --bg:#f2f5ff;
+    --card:#ffffff;
+    --card2:#edf2ff;
+    --text:#182033;
+    --muted:#596579;
+    --border:#d6def0;
+}
+
+button{
+    font-family:inherit;
+}
+
+header{
+    height:70px;
+    padding:0 6%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:rgba(7,17,31,.92);
+    backdrop-filter:blur(15px);
+    border-bottom:1px solid var(--border);
+}
+
+body.light header{
+    background:rgba(255,255,255,.9);
+}
+
+.logo{
+    font-size:25px;
+    font-weight:800;
+}
+
+.logo span{
+    color:var(--primary);
+}
+
+nav{
+    display:flex;
+    gap:25px;
+}
+
+nav a{
+    color:var(--muted);
+    text-decoration:none;
+    font-size:14px;
+}
+
+nav a:hover{
+    color:var(--cyan);
+}
+
+.header-right{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.icon-btn{
+    width:40px;
+    height:40px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    border-radius:50%;
+    cursor:pointer;
+}
+
+.profile-btn{
+    padding:10px 15px;
+    border:0;
+    border-radius:20px;
+    background:linear-gradient(90deg,#6d5dfc,#a855f7);
+    color:white;
+    cursor:pointer;
+}
+
+/* HERO */
+
+.hero{
+    min-height:390px;
+    padding:70px 7%;
+    display:flex;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+    background:
+    radial-gradient(circle at 80% 40%,#673ab733,transparent 35%),
+    radial-gradient(circle at 20% 20%,#00d9ff22,transparent 35%);
+}
+
+.hero-content{
+    max-width:700px;
+    position:relative;
+    z-index:2;
+}
+
+.badge{
+    display:inline-block;
+    padding:8px 15px;
+    border-radius:30px;
+    background:#7c6cff22;
+    border:1px solid #7c6cff55;
+    color:#b7afff;
+    margin-bottom:20px;
+}
+
+.hero h1{
+    font-size:clamp(38px,6vw,70px);
+    line-height:1.05;
+}
+
+.gradient-text{
+    background:linear-gradient(90deg,#67e8f9,#a78bfa,#f472b6);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.hero p{
+    margin-top:22px;
+    color:var(--muted);
+    font-size:17px;
+    line-height:1.7;
+    max-width:620px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:12px;
+    margin-top:25px;
+    flex-wrap:wrap;
+}
+
+.primary-btn,
+.secondary-btn{
+    padding:13px 22px;
+    border-radius:25px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.primary-btn{
+    border:0;
+    color:white;
+    background:linear-gradient(90deg,#6d5dfc,#a855f7);
+}
+
+.secondary-btn{
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+}
+
+/* CONTAINER */
+
+.container{
+    width:90%;
+    max-width:1250px;
+    margin:auto;
+}
+
+.section{
+    padding:35px 0;
+}
+
+.section-heading{
+    margin-bottom:20px;
+}
+
+.section-heading h2{
+    font-size:28px;
+}
+
+.section-heading p{
+    color:var(--muted);
+    margin-top:7px;
+}
+
+/* MOODS */
+
+.moods{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:14px;
+}
+
+.mood{
+    background:var(--card);
+    border:1px solid var(--border);
+    padding:22px 10px;
+    border-radius:20px;
+    text-align:center;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.mood:hover{
+    transform:translateY(-7px);
+}
+
+.mood.active{
+    border-color:var(--cyan);
+    box-shadow:0 0 25px #67e8f933;
+}
+
+.mood-icon{
+    font-size:42px;
+}
+
+.mood h3{
+    margin-top:9px;
+}
+
+.mood small{
+    display:block;
+    margin-top:5px;
+    color:var(--muted);
+}
+
+/* DASHBOARD */
+
+.dashboard{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
+}
+
+.panel{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:25px;
+    padding:25px;
+}
+
+.selected-mood{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.selected-icon{
+    font-size:55px;
+}
+
+.selected-mood h2{
+    color:var(--cyan);
+    font-size:32px;
+}
+
+.selected-mood p{
+    color:var(--muted);
+    margin-top:5px;
+}
+
+.activities{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.activity{
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:20px;
+    transition:.3s;
+}
+
+.activity:hover{
+    transform:translateY(-4px);
+}
+
+.activity-icon{
+    font-size:30px;
+}
+
+.activity h3{
+    margin:10px 0 6px;
+}
+
+.activity p{
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.5;
+}
+
+.activity button{
+    margin-top:14px;
+    border:0;
+    padding:10px 17px;
+    border-radius:20px;
+    background:linear-gradient(90deg,#6d5dfc,#a855f7);
+    color:white;
+    cursor:pointer;
+}
+
+/* SIDE */
+
+.motivation{
+    padding:25px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#4c2b9b,#173d75);
+    margin-bottom:20px;
+}
+
+.motivation h3{
+    font-size:22px;
+    margin-bottom:10px;
+}
+
+.motivation p{
+    color:#dbeafe;
+    line-height:1.6;
+}
+
+.streak{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:25px;
+}
+
+.streak-number{
+    font-size:45px;
+    font-weight:bold;
+    color:var(--cyan);
+}
+
+/* CHAT */
+
+.chat-box{
+    height:360px;
+    overflow-y:auto;
+    padding:15px;
+    background:var(--card2);
+    border-radius:18px;
+}
+
+.message{
+    max-width:80%;
+    padding:12px 16px;
+    border-radius:17px;
+    margin:10px 0;
+    line-height:1.5;
+}
+
+.bot{
+    background:#1d3150;
+}
+
+.user{
+    background:linear-gradient(90deg,#635bdf,#8b5cf6);
+    margin-left:auto;
+}
+
+.chat-input{
+    display:flex;
+    gap:10px;
+    margin-top:12px;
+}
+
+.chat-input input{
+    flex:1;
+    padding:13px 16px;
+    border-radius:25px;
+    border:1px solid var(--border);
+    outline:none;
+    background:var(--card2);
+    color:var(--text);
+}
+
+.chat-input button{
+    width:50px;
+    border:0;
+    border-radius:50%;
+    background:#7c6cff;
+    color:white;
+    cursor:pointer;
+}
+
+/* MOOD HISTORY */
+
+.history{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+    gap:12px;
+}
+
+.history-item{
+    padding:18px;
+    border-radius:17px;
+    text-align:center;
+    background:var(--card2);
+    border:1px solid var(--border);
+}
+
+.history-item .emoji{
+    font-size:30px;
+}
+
+/* GAME */
+
+.game-area{
+    position:relative;
+    height:280px;
+    overflow:hidden;
+    background:#061528;
+    border-radius:18px;
+    margin-top:15px;
+}
+
+.target{
+    position:absolute;
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:#67e8f9;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:25px;
+}
+
+/* BREATHING */
+
+.breath-container{
+    text-align:center;
+}
+
+.breath-circle{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    margin:30px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#67e8f9,#8b5cf6);
+    box-shadow:0 0 50px #67e8f933;
+    animation:breathe 8s infinite;
+}
+
+@keyframes breathe{
+    0%{
+        transform:scale(.75);
+    }
+    50%{
+        transform:scale(1.2);
+    }
+    100%{
+        transform:scale(.75);
+    }
+}
+
+/* MUSIC */
+
+.music-card{
+    text-align:center;
+}
+
+.music-orb{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    margin:25px auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:50px;
+    background:linear-gradient(135deg,#f472b6,#8b5cf6);
+    animation:musicPulse 2s infinite;
+}
+
+@keyframes musicPulse{
+    50%{
+        transform:scale(1.08);
+    }
+}
+
+/* PROFILE */
+
+.profile{
+    text-align:center;
+}
+
+.avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#67e8f9,#8b5cf6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:40px;
+    margin:0 auto 15px;
+}
+
+.input{
+    width:100%;
+    padding:13px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    margin-top:10px;
+    background:var(--card2);
+    color:var(--text);
+}
+
+/* SAFETY */
+
+.safety{
+    border:1px solid #f472b655;
+    background:#f472b611;
+    border-radius:20px;
+    padding:25px;
+}
+
+.safety h3{
+    color:#f9a8d4;
+}
+
+.safety p{
+    color:var(--muted);
+    line-height:1.6;
+    margin-top:8px;
+}
+
+/* MODAL */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:5000;
+    background:#000b;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal-box{
+    width:100%;
+    max-width:600px;
+    max-height:90vh;
+    overflow:auto;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:25px;
+    padding:28px;
+    animation:popup .25s;
+}
+
+@keyframes popup{
+    from{
+        transform:scale(.8);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+.close{
+    float:right;
+    font-size:25px;
+    cursor:pointer;
+    color:var(--muted);
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    padding:15px 20px;
+    background:#182a45;
+    border:1px solid var(--border);
+    border-radius:15px;
+    display:none;
+    z-index:7000;
+}
+
+/* FOOTER */
+
+footer{
+    padding:45px;
+    text-align:center;
+    color:var(--muted);
+    border-top:1px solid var(--border);
+    margin-top:30px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
+
+    .moods{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:650px){
+
+    header{
+        padding:0 4%;
+    }
+
+    nav{
+        display:none;
+    }
+
+    .hero{
+        padding:55px 5%;
+    }
+
+    .hero h1{
+        font-size:40px;
+    }
+
+    .moods{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .activities{
+        grid-template-columns:1fr;
+    }
+
+    .container{
+        width:94%;
+    }
+
+    .profile-btn{
+        display:none;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+<div class="logo">
+    💗 Mood<span>Mate</span>
+</div>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#mood">Mood</a>
+    <a href="#companion">Companion</a>
+    <a href="#games">Games</a>
+    <a href="#history">History</a>
+</nav>
+
+<div class="header-right">
+
+<button class="icon-btn" onclick="toggleTheme()" id="themeBtn">
+🌙
+</button>
+
+<button class="profile-btn" onclick="openProfile()">
+👤 Profile
+</button>
+
+</div>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+
+<div class="hero-content">
+
+<div class="badge">
+✨ Your personal mood companion
+</div>
+
+<h1>
+Better moods.<br>
+<span class="gradient-text">Happier moments.</span>
+</h1>
+
+<p>
+Whatever you're feeling right now, MoodMate gives
+you small and simple activities to help you pause,
+relax, have fun, connect with others and take care
+of yourself.
+</p>
+
+<div class="hero-buttons">
+
+<button class="primary-btn"
+onclick="document.getElementById('mood').scrollIntoView({behavior:'smooth'})">
+Choose My Mood 💗
+</button>
+
+<button class="secondary-btn"
+onclick="openCompanion()">
+Talk to MoodMate 💬
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<main class="container">
+
+
+<!-- MOOD -->
+
+<section class="section" id="mood">
+
+<div class="section-heading">
+
+<h2>☀️ How are you feeling?</h2>
+
+<p>
+Choose honestly. There is no wrong answer.
+</p>
+
+</div>
+
+
+<div class="moods">
+
+<div class="mood active"
+onclick="selectMood('happy',this)">
+<div class="mood-icon">😊</div>
+<h3>Happy</h3>
+<small>Good vibes</small>
+</div>
+
+<div class="mood"
+onclick="selectMood('sad',this)">
+<div class="mood-icon">😢</div>
+<h3>Sad</h3>
+<small>Need comfort</small>
+</div>
+
+<div class="mood"
+onclick="selectMood('angry',this)">
+<div class="mood-icon">😡</div>
+<h3>Angry</h3>
+<small>Need release</small>
+</div>
+
+<div class="mood"
+onclick="selectMood('anxious',this)">
+<div class="mood-icon">😰</div>
+<h3>Anxious</h3>
+<small>Need calm</small>
+</div>
+
+<div class="mood"
+onclick="selectMood('lonely',this)">
+<div class="mood-icon">🥺</div>
+<h3>Lonely</h3>
+<small>Need connection</small>
+</div>
+
+<div class="mood"
+onclick="selectMood('bored',this)">
+<div class="mood-icon">😴</div>
+<h3>Bored</h3>
+<small>Need fun</small>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- DASHBOARD -->
+
+<section class="section">
+
+<div class="dashboard">
+
+
+<div class="panel">
+
+<div class="selected-mood">
+
+<div class="selected-icon" id="selectedIcon">
+😊
+</div>
+
+<div>
+<h2 id="selectedTitle">Happy</h2>
+
+<p id="selectedMessage">
+That's wonderful! Let's keep those good vibes going.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="activities" id="activities">
+
+<!-- JS INSERTS ACTIVITIES -->
+
+</div>
+
+</div>
+
+
+<div>
+
+<div class="motivation">
+
+<h3>
+💜 Today's Reminder
+</h3>
+
+<p id="dailyQuote">
+You don't have to be perfect.
+You only have to keep going.
+</p>
+
+</div>
+
+
+<div class="streak">
+
+<h3>🔥 MoodMate Streak</h3>
+
+<div class="streak-number"
+id="streak">
+0
+</div>
+
+<p style="color:var(--muted)">
+days of checking in
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- COMPANION -->
+
+<section class="section" id="companion">
+
+<div class="section-heading">
+
+<h2>🤖 MoodMate Companion</h2>
+
+<p>
+A friendly space to express what's on your mind.
+</p>
+
+</div>
+
+
+<div class="panel">
+
+<div class="chat-box" id="chatBox">
+
+<div class="message bot">
+Hey! 💗 I'm MoodMate. I'm here to listen.
+How are you feeling right now?
+</div>
+
+</div>
+
+
+<div class="chat-input">
+
+<input
+id="chatInput"
+placeholder="Type how you're feeling..."
+onkeydown="if(event.key==='Enter')sendMessage()">
+
+<button onclick="sendMessage()">➤</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- GAMES -->
+
+<section class="section" id="games">
+
+<div class="section-heading">
+
+<h2>🎮 Take a Little Break</h2>
+
+<p>
+Small games to give your mind something fun to focus on.
+</p>
+
+</div>
+
+
+<div class="activities">
+
+<div class="activity">
+
+<div class="activity-icon">🎯</div>
+
+<h3>Tap the Target</h3>
+
+<p>
+How many targets can you tap in 20 seconds?
+</p>
+
+<button onclick="openTargetGame()">
+Play Game
+</button>
+
+</div>
+
+
+<div class="activity">
+
+<div class="activity-icon">🧠</div>
+
+<h3>Memory Match</h3>
+
+<p>
+Find matching emoji pairs and test your memory.
+</p>
+
+<button onclick="openMemoryGame()">
+Play Game
+</button>
+
+</div>
+
+
+<div class="activity">
+
+<div class="activity-icon">🌬️</div>
+
+<h3>Breathing Game</h3>
+
+<p>
+Follow the circle and slow your breathing.
+</p>
+
+<button onclick="openBreathing()">
+Start
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- HISTORY -->
+
+<section class="section" id="history">
+
+<div class="section-heading">
+
+<h2>📊 Your Mood Journey</h2>
+
+<p>
+Your recent mood check-ins are stored only in this browser.
+</p>
+
+</div>
+
+
+<div class="panel">
+
+<div class="history" id="historyList">
+</div>
+
+<br>
+
+<button class="secondary-btn"
+onclick="clearHistory()">
+Clear History
+</button>
+
+</div>
+
+</section>
+
+
+<!-- SAFETY -->
+
+<section class="section">
+
+<div class="safety">
+
+<h3>💗 One important thing</h3>
+
+<p>
+MoodMate can provide activities, encouragement and a
+place to express yourself, but it isn't a replacement
+for a trusted person or professional support.
+</p>
+
+<p>
+If you ever feel unsafe or think you might hurt yourself,
+please contact someone you trust or your local emergency
+or crisis service immediately. You don't have to face a
+serious moment alone.
+</p>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+💗 <strong>MoodMate</strong><br><br>
+
+Every mood is valid.  
+Take one small step at a time.
+
+<br><br>
+
+© 2026 MoodMate
+
+</footer>
+
+
+<!-- MODAL -->
+
+<div class="modal" id="modal">
+
+<div class="modal-box">
+
+<span class="close" onclick="closeModal()">×</span>
+
+<div id="modalContent"></div>
+
+</div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* =========================
+   MOOD DATA
+========================= */
+
+const moods={
+
+happy:{
+emoji:"😊",
+title:"Happy",
+message:"That's wonderful! Let's keep those good vibes going.",
+activities:[
+["🎉","Celebrate","Write down three things that made you happy today.","quote"],
+["🎵","Music","Listen to a favorite song and enjoy the moment.","music"],
+["🎮","Fun Game","Give your brain a fun challenge.","game"],
+["📸","Happy Memory","Think about one beautiful memory.","memory"]
+]
+},
+
+sad:{
+emoji:"😢",
+title:"Sad",
+message:"It's okay to feel sad. You don't have to hide your feelings.",
+activities:[
+["💬","Talk","Tell MoodMate what's on your mind.","chat"],
+["🌬️","Breathe","Slow down and give yourself a moment.","breath"],
+["📖","Positive Story","Read something hopeful.","story"],
+["💗","Self Kindness","Do one gentle thing for yourself.","kind"]
+]
+},
+
+angry:{
+emoji:"😡",
+title:"Angry",
+message:"Let's create a pause before you react.",
+activities:[
+["🌬️","Breathe","Slow breathing can create some space.","breath"],
+["🎯","Release Energy","Play a quick tapping game.","game"],
+["📝","Write It Down","Write what made you angry.","write"],
+["🚶","Move","Stretch or take a short walk.","move"]
+]
+},
+
+anxious:{
+emoji:"😰",
+title:"Anxious",
+message:"Let's focus on this moment instead of everything at once.",
+activities:[
+["🌬️","Breathing","Follow the breathing circle.","breath"],
+["👀","5-4-3-2-1","Notice things around you.","ground"],
+["🧠","Memory Game","Focus your attention on a simple game.","memory"],
+["💧","Reset","Drink some water and pause.","water"]
+]
+},
+
+lonely:{
+emoji:"🥺",
+title:"Lonely",
+message:"You're not alone. Let's make this moment a little lighter.",
+activities:[
+["💬","Talk With Me","Tell me what you're feeling.","chat"],
+["🎮","Play a Game","Give your mind something fun to do.","game"],
+["🎵","Peaceful Moment","Listen to a calming sound.","music"],
+["📖","Positive Story","Read a small story about hope.","story"],
+["📞","Reach Someone","Think of one person you could message.","reach"],
+["✨","Small Activity","Do one small thing for yourself.","activity"]
+]
+},
+
+bored:{
+emoji:"😴",
+title:"Bored",
+message:"Let's turn this boring moment into something interesting!",
+activities:[
+["🎯","Target Game","See how fast you can tap.","game"],
+["🧠","Memory Game","Challenge your memory.","memory"],
+["🎵","Music","Create a peaceful soundscape.","music"],
+["💡","Learn Something","Discover a new fact.","learn"]
+]
+}
+
+};
+
+
+/* =========================
+   SELECT MOOD
+========================= */
+
+let currentMood="happy";
+
+function selectMood(mood,element){
+
+currentMood=mood;
+
+document.querySelectorAll(".mood")
+.forEach(x=>x.classList.remove("active"));
+
+element.classList.add("active");
+
+const data=moods[mood];
+
+document.getElementById("selectedIcon").innerText=data.emoji;
+
+document.getElementById("selectedTitle").innerText=data.title;
+
+document.getElementById("selectedMessage").innerText=data.message;
+
+let html="";
+
+data.activities.forEach((item,index)=>{
+
+html+=`
+
+<div class="activity">
+
+<div class="activity-icon">
+${item[0]}
+</div>
+
+<h3>${item[1]}</h3>
+
+<p>${item[2]}</p>
+
+<button onclick="runActivity('${item[3]}')">
+Let's Go
+</button>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("activities").innerHTML=html;
+
+saveMood(mood);
+
+}
+
+
+/* =========================
+   ACTIVITIES
+========================= */
+
+function runActivity(type){
+
+switch(type){
+
+case"chat":
+openCompanion();
+break;
+
+case"breath":
+openBreathing();
+break;
+
+case"game":
+openTargetGame();
+break;
+
+case"memory":
+openMemoryGame();
+break;
+
+case"music":
+openMusic();
+break;
+
+case"story":
+openStory();
+break;
+
+case"reach":
+openReach();
+break;
+
+case"ground":
+openGrounding();
+break;
+
+case"quote":
+showQuote();
+break;
+
+case"kind":
+showKindness();
+break;
+
+case"write":
+showWrite();
+break;
+
+case"move":
+showMove();
+break;
+
+case"water":
+showWater();
+break;
+
+case"activity":
+showActivity();
+break;
+
+case"learn":
+showFact();
+break;
+
+}
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function openModal(content){
+
+document.getElementById("modalContent").innerHTML=content;
+
+document.getElementById("modal").style.display="flex";
+
+}
+
+function closeModal(){
+
+document.getElementById("modal").style.display="none";
+
+}
+
+
+/* =========================
+   COMPANION
+========================= */
+
+function openCompanion(){
+
+document.getElementById("companion")
+.scrollIntoView({behavior:"smooth"});
+
+document.getElementById("chatInput").focus();
+
+}
+
+function sendMessage(){
+
+const input=document.getElementById("chatInput");
+
+const text=input.value.trim();
+
+if(!text)return;
+
+addMessage(text,"user");
+
+input.value="";
+
+setTimeout(()=>{
+
+let reply=getReply(text);
+
+addMessage(reply,"bot");
+
+},600);
+
+}
+
+function addMessage(text,type){
+
+const box=document.getElementById("chatBox");
+
+const div=document.createElement("div");
+
+div.className="message "+type;
+
+div.innerText=text;
+
+box.appendChild(div);
+
+box.scrollTop=box.scrollHeight;
+
+}
+
+function getReply(text){
+
+let t=text.toLowerCase();
+
+if(
+t.includes("lonely")||
+t.includes("alone")
+)
+return "I'm sorry you're feeling lonely. 💗 You don't have to solve the feeling all at once. Would you like to play a game, try breathing, or think of someone you could message?";
+
+if(
+t.includes("sad")||
+t.includes("cry")
+)
+return "It's okay to have a sad moment. You don't need to hide it. Take one slow breath and be gentle with yourself. 🌷";
+
+if(
+t.includes("angry")||
+t.includes("mad")
+)
+return "Let's pause before doing anything. Take a slow breath and give yourself a little space. 🌬️";
+
+if(
+t.includes("anxious")||
+t.includes("stress")||
+t.includes("worried")
+)
+return "Let's come back to the present. Look around and name five things you can see. You're here, right now. 💙";
+
+if(
+t.includes("happy")||
+t.includes("good")
+)
+return "That's great to hear! 😊 Hold onto this moment and maybe write down what made today good.";
+
+return "Thank you for telling me. 💗 I'm listening. You can take things one small step at a time.";
+
+}
+
+
+/* =========================
+   BREATHING
+========================= */
+
+function openBreathing(){
+
+openModal(`
+
+<div class="breath-container">
+
+<h2>🌬️ Breathe With Me</h2>
+
+<p style="color:var(--muted);margin-top:10px">
+Follow the circle slowly.
+</p>
+
+<div class="breath-circle">
+Breathe
+</div>
+
+<h3 id="breathText">
+Breathe in...
+</h3>
+
+<p style="color:var(--muted);margin-top:10px">
+Inhale slowly • pause • exhale slowly
+</p>
+
+</div>
+
+`);
+
+let count=0;
+
+const interval=setInterval(()=>{
+
+let text=document.getElementById("breathText");
+
+if(!text){
+
+clearInterval(interval);
+
+return;
+
+}
+
+count++;
+
+if(count%8<4){
+
+text.innerText="🌬️ Breathe in...";
+
+}else{
+
+text.innerText="😌 Breathe out...";
+
+}
+
+},1000);
+
+}
+
+
+/* =========================
+   TARGET GAME
+========================= */
+
+let gameScore=0;
+let gameTime=20;
+let gameTimer;
+
+function openTargetGame(){
+
+openModal(`
+
+<h2>🎯 Tap the Target</h2>
+
+<p style="color:var(--muted)">
+Tap as many targets as possible in 20 seconds!
+</p>
+
+<h3 style="margin-top:15px">
+Score: <span id="gameScore">0</span>
+&nbsp;&nbsp;
+Time: <span id="gameTime">20</span>
+</h3>
+
+<div class="game-area" id="gameArea">
+
+<div class="target"
+id="target"
+onclick="hitTarget()">
+🎯
+</div>
+
+</div>
+
+<button class="primary-btn"
+style="margin-top:15px"
+onclick="startTargetGame()">
+Start Game
+</button>
+
+`);
+
+}
+
+
+function startTargetGame(){
+
+gameScore=0;
+
+gameTime=20;
+
+document.getElementById("gameScore").innerText=0;
+
+document.getElementById("gameTime").innerText=20;
+
+document.getElementById("target").style.display="flex";
+
+moveTarget();
+
+clearInterval(gameTimer);
+
+gameTimer=setInterval(()=>{
+
+gameTime--;
+
+document.getElementById("gameTime").innerText=gameTime;
+
+if(gameTime<=0){
+
+clearInterval(gameTimer);
+
+document.getElementById("target").style.display="none";
+
+showToast("🎉 Great job! Score: "+gameScore);
+
+}
+
+},1000);
+
+}
+
+
+function moveTarget(){
+
+let area=document.getElementById("gameArea");
+
+let target=document.getElementById("target");
+
+if(!area||!target)return;
+
+let x=Math.random()*(area.clientWidth-60);
+
+let y=Math.random()*(area.clientHeight-60);
+
+target.style.left=x+"px";
+
+target.style.top=y+"px";
+
+}
+
+
+function hitTarget(){
+
+gameScore++;
+
+document.getElementById("gameScore").innerText=gameScore;
+
+moveTarget();
+
+}
+
+
+/* =========================
+   MEMORY GAME
+========================= */
+
+let memoryFirst=null;
+let memoryLock=false;
+
+function openMemoryGame(){
+
+const icons=["🍎","🚀","🌟","🐱","🍕","🌈"];
+
+let cards=[...icons,...icons];
+
+cards.sort(()=>Math.random()-.5);
+
+let html=`
+
+<h2>🧠 Memory Match</h2>
+
+<p style="color:var(--muted)">
+Find all matching pairs.
+</p>
+
+<div style="
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+margin-top:20px;
+">
+
+`;
+
+cards.forEach((emoji,i)=>{
+
+html+=`
+
+<button
+class="memory-card"
+id="memory${i}"
+onclick="flipMemory(${i},'${emoji}')"
+style="
+height:70px;
+font-size:27px;
+border:1px solid var(--border);
+border-radius:15px;
+background:var(--card2);
+color:white;
+cursor:pointer">
+❓
+</button>
+
+`;
+
+});
+
+html+="</div>";
+
+openModal(html);
+
+memoryFirst=null;
+
+memoryLock=false;
+
+}
+
+
+function flipMemory(index,emoji){
+
+if(memoryLock)return;
+
+let card=document.getElementById("memory"+index);
+
+if(card.innerText!=="❓")return;
+
+card.innerText=emoji;
+
+if(memoryFirst===null){
+
+memoryFirst={index,emoji};
+
+return;
+
+}
+
+if(memoryFirst.emoji===emoji){
+
+memoryFirst=null;
+
+showToast("✨ Match!");
+
+}else{
+
+memoryLock=true;
+
+let first=memoryFirst;
+
+memoryFirst=null;
+
+setTimeout(()=>{
+
+document.getElementById("memory"+first.index).innerText="❓";
+
+card.innerText="❓";
+
+memoryLock=false;
+
+},700);
+
+}
+
+}
+
+
+/* =========================
+   MUSIC
+========================= */
+
+let audioContext;
+let oscillator;
+let gain;
+
+function openMusic(){
+
+openModal(`
+
+<div class="music-card">
+
+<h2>🎵 Peaceful Sound</h2>
+
+<p style="color:var(--muted)">
+A gentle sound generated by your browser.
+</p>
+
+<div class="music-orb">
+🎵
+</div>
+
+<button class="primary-btn"
+onclick="startSound()">
+▶ Start
+</button>
+
+<button class="secondary-btn"
+onclick="stopSound()">
+■ Stop
+</button>
+
+</div>
+
+`);
+
+}
+
+function startSound(){
+
+try{
+
+audioContext=new
+(window.AudioContext||window.webkitAudioContext)();
+
+oscillator=audioContext.createOscillator();
+
+gain=audioContext.createGain();
+
+oscillator.frequency.value=432;
+
+gain.gain.value=.03;
+
+oscillator.connect(gain);
+
+gain.connect(audioContext.destination);
+
+oscillator.start();
+
+showToast("🎵 Peaceful sound started");
+
+}catch(e){
+
+alert("Your browser does not support this audio feature.");
+
+}
+
+}
+
+function stopSound(){
+
+if(oscillator){
+
+oscillator.stop();
+
+oscillator=null;
+
+}
+
+}
+
+
+/* =========================
+   STORY
+========================= */
+
+function openStory(){
+
+openModal(`
+
+<h2>📖 The Next Small Step</h2>
+
+<p style="
+margin-top:20px;
+line-height:1.8;
+color:var(--muted)">
+
+There was once a person who believed
+they had to solve everything at once.
+
+One evening, they felt overwhelmed.
+
+Instead of trying to fix the whole future,
+they decided to take one small step.
+
+They drank some water.
+
+They took a breath.
+
+They sent a message to someone they trusted.
+
+Nothing magically changed in one second.
+
+But the next moment felt a little easier.
+
+Sometimes that's enough.
+
+You don't need to finish the whole journey today.
+
+Just take the next small step.
+
+</p>
+
+<h3 style="
+margin-top:20px;
+color:var(--cyan)">
+🌱 Small steps still count.
+</h3>
+
+`);
+
+}
+
+
+/* =========================
+   OTHER ACTIVITIES
+========================= */
+
+function openReach(){
+
+openModal(`
+
+<h2>📞 Reach Someone</h2>
+
+<p style="margin-top:15px;color:var(--muted)">
+Think of one person who makes you feel comfortable.
+You don't need a big conversation.
+A simple message is enough.
+</p>
+
+<div style="
+padding:20px;
+margin-top:20px;
+background:var(--card2);
+border-radius:15px">
+
+<strong>Try sending:</strong>
+
+<p style="margin-top:10px;color:var(--cyan)">
+"Hey! Are you free to talk for a few minutes?"
+</p>
+
+</div>
+
+`);
+
+}
+
+
+function openGrounding(){
+
+openModal(`
+
+<h2>👀 5-4-3-2-1 Grounding</h2>
+
+<p style="margin-top:15px;color:var(--muted)">
+Slowly notice:
+</p>
+
+<div style="line-height:2;margin-top:15px">
+
+5️⃣ things you can see<br>
+4️⃣ things you can touch<br>
+3️⃣ things you can hear<br>
+2️⃣ things you can smell<br>
+1️⃣ thing you can taste
+
+</div>
+
+`);
+
+}
+
+
+function showQuote(){
+
+openModal(`
+
+<h2>💫 Your Reminder</h2>
+
+<h3 style="
+margin-top:25px;
+font-size:25px;
+color:var(--cyan)">
+
+"Today doesn't have to be perfect
+to be meaningful."
+
+</h3>
+
+`);
+
+}
+
+
+function showKindness(){
+
+openModal(`
+
+<h2>💗 Be Kind To Yourself</h2>
+
+<p style="margin-top:20px;color:var(--muted)">
+Choose one:
+</p>
+
+<div style="line-height:2;margin-top:15px">
+🌿 Drink water<br>
+🎵 Listen to a favorite song<br>
+🚶 Take a short walk<br>
+📖 Read something you enjoy<br>
+😴 Take a proper rest
+</div>
+
+`);
+
+}
+
+
+function showWrite(){
+
+openModal(`
+
+<h2>📝 Let It Out</h2>
+
+<p style="color:var(--muted);margin-top:10px">
+Write whatever is making you angry.
+You don't have to show it to anyone.
+</p>
+
+<textarea
+id="writeArea"
+style="
+width:100%;
+height:150px;
+margin-top:20px;
+padding:15px;
+border-radius:15px;
+border:1px solid var(--border);
+background:var(--card2);
+color:var(--text);
+resize:none"
+placeholder="Write here..."></textarea>
+
+<button
+class="primary-btn"
+style="margin-top:15px"
+onclick="showToast('💗 You expressed it. Take a breath.')">
+Done
+</button>
+
+`);
+
+}
+
+
+function showMove(){
+
+openModal(`
+
+<h2>🚶 Move Your Body</h2>
+
+<p style="margin-top:15px;color:var(--muted)">
+Try this for one minute:
+</p>
+
+<div style="line-height:2;margin-top:15px">
+🙆 Stretch your arms<br>
+🔄 Roll your shoulders<br>
+🦵 Stretch your legs<br>
+🌬️ Take three slow breaths
+</div>
+
+`);
+
+}
+
+
+function showWater(){
+
+openModal(`
+
+<h2>💧 Small Reset</h2>
+
+<p style="margin-top:20px;color:var(--muted)">
+Get a glass of water.
+Take a few slow sips.
+Then take one deep breath.
+</p>
+
+<h2 style="margin-top:25px">
+💙 Done is enough.
+</h2>
+
+`);
+
+}
+
+
+function showActivity(){
+
+openModal(`
+
+<h2>✨ 5-Minute Challenge</h2>
+
+<p style="margin-top:15px;color:var(--muted)">
+Pick ONE:
+</p>
+
+<div style="line-height:2;margin-top:15px">
+🎨 Draw something<br>
+📚 Read two pages<br>
+🧹 Clean one small area<br>
+🌱 Step outside<br>
+🎵 Listen to one song
+</div>
+
+`);
+
+}
+
+
+function showFact(){
+
+const facts=[
+
+"🐙 Octopuses have three hearts.",
+"🌌 There are more stars in the universe than grains of sand on many beaches.",
+"🍌 Bananas are berries botanically.",
+"🧠 Your brain uses a lot of your body's energy.",
+"🌊 Most of Earth's surface is covered by water."
+
+];
+
+let fact=facts[Math.floor(Math.random()*facts.length)];
+
+openModal(`
+
+<h2>💡 Interesting Fact</h2>
+
+<h3 style="
+margin-top:25px;
+font-size:24px;
+color:var(--cyan)">
+${fact}
+</h3>
+
+`);
+
+}
+
+
+/* =========================
+   MOOD STORAGE
+========================= */
+
+function saveMood(mood){
+
+let history=
+JSON.parse(localStorage.getItem("moodHistory")||"[]");
+
+history.unshift({
+
+mood:mood,
+
+date:new Date().toLocaleDateString(),
+
+time:new Date().toLocaleTimeString([],{
+hour:"2-digit",
+minute:"2-digit"
+})
+
+});
+
+history=history.slice(0,20);
+
+localStorage.setItem(
+"moodHistory",
+JSON.stringify(history)
+);
+
+updateHistory();
+
+}
+
+
+function updateHistory(){
+
+let history=
+JSON.parse(localStorage.getItem("moodHistory")||"[]");
+
+let list=document.getElementById("historyList");
+
+if(history.length===0){
+
+list.innerHTML=`
+<p style="color:var(--muted)">
+No mood check-ins yet. Choose a mood above.
+</p>`;
+
+return;
+
+}
+
+list.innerHTML="";
+
+history.forEach(item=>{
+
+let data=moods[item.mood];
+
+list.innerHTML+=`
+
+<div class="history-item">
+
+<div class="emoji">
+${data.emoji}
+</div>
+
+<strong>
+${data.title}
+</strong>
+
+<small style="
+display:block;
+color:var(--muted);
+margin-top:7px">
+${item.date}<br>
+${item.time}
+</small>
+
+</div>
+
+`;
+
+});
+
+updateStreak(history);
+
+}
+
+
+function updateStreak(history){
+
+if(history.length===0){
+
+document.getElementById("streak").innerText=0;
+
+return;
+
+}
+
+let dates=[...new Set(
+history.map(x=>x.date)
+)];
+
+document.getElementById("streak").innerText=dates.length;
+
+}
+
+
+function clearHistory(){
+
+localStorage.removeItem("moodHistory");
+
+updateHistory();
+
+showToast("History cleared.");
+
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+function openProfile(){
+
+let name=
+localStorage.getItem("moodName")||"Friend";
+
+openModal(`
+
+<div class="profile">
+
+<div class="avatar">
+👤
+</div>
+
+<h2>Your MoodMate Profile</h2>
+
+<p style="color:var(--muted);margin-top:7px">
+Your profile stays on this device.
+</p>
+
+<input
+class="input"
+id="profileName"
+value="${name}"
+placeholder="Enter your name">
+
+<button
+class="primary-btn"
+style="margin-top:15px"
+onclick="saveProfile()">
+Save Profile
+</button>
+
+</div>
+
+`);
+
+}
+
+
+function saveProfile(){
+
+let name=document
+.getElementById("profileName")
+.value
+.trim();
+
+if(name){
+
+localStorage.setItem("moodName",name);
+
+showToast("💗 Profile saved!");
+
+closeModal();
+
+}
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function toggleTheme(){
+
+document.body.classList.toggle("light");
+
+let light=
+document.body.classList.contains("light");
+
+localStorage.setItem("theme",light?"light":"dark");
+
+document.getElementById("themeBtn").innerText=
+light?"☀️":"🌙";
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+let toast=document.getElementById("toast");
+
+toast.innerText=message;
+
+toast.style.display="block";
+
+setTimeout(()=>{
+
+toast.style.display="none";
+
+},2500);
+
+}
+
+
+/* =========================
+   DAILY QUOTE
+========================= */
+
+const quotes=[
+
+"🌱 Small steps create big changes.",
+"💗 You are allowed to take things slowly.",
+"☀️ Tomorrow can be different from today.",
+"🌈 Difficult moments don't last forever.",
+"💙 Be patient with yourself.",
+"✨ You are more capable than you think."
+
+];
+
+document.getElementById("dailyQuote").innerText=
+quotes[Math.floor(Math.random()*quotes.length)];
+
+
+/* =========================
+   LOAD
+========================= */
+
+window.addEventListener("load",()=>{
+
+let theme=localStorage.getItem("theme");
+
+if(theme==="light"){
+
+document.body.classList.add("light");
+
+document.getElementById("themeBtn").innerText="☀️";
+
+}
+
+updateHistory();
+
+selectMood(
+"happy",
+document.querySelector(".mood")
+);
+
+});
+
+
+/* CLOSE MODAL OUTSIDE */
+
+document.getElementById("modal")
+.addEventListener("click",function(e){
+
+if(e.target===this){
+
+closeModal();
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
